@@ -22,10 +22,10 @@ steps:
     architecture: 'x64'
 
 
-- powershell: |
+- bash: |
     pip3 install --upgrade databricks-cli
     databricks configure --token --profile AZDO
 
-- powershell: |
+- bash: |
     databricks workspace list --profile AZDO
     databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/databricks/ /demo
