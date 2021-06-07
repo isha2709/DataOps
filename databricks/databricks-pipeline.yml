@@ -22,7 +22,7 @@ steps:
     architecture: 'x64'
 
 
-- bash: |
+- powershell: |
     pip3 install --upgrade databricks-cli
     databricks configure --token --profile AZDO
 
