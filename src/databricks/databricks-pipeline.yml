@@ -4,26 +4,27 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+stages:
+  - stage: build
+    jobs:
+      - job:
+        steps:
 
-jobs:
-  - job:
-    steps:
+        - task: UsePythonVersion@0
+          displayName: Configuring Python Version
+          inputs:
+            versionSpec: '3.x'
+            addToPath: true
+            architecture: 'x64'
 
-    - task: UsePythonVersion@0
-      displayName: Configuring Python Version
-      inputs:
-        versionSpec: '3.x'
-        addToPath: true
-        architecture: 'x64'
+        - powershell: |
+            Write-Output "[AZDO]" | Out-File ~\.databrickscfg -Encoding ASCII
+            Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
+            Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
 
-    - powershell: |
-        Write-Output "[AZDO]" | Out-File ~\.databrickscfg -Encoding ASCII
-        Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
-        Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
+            pip3 install --upgrade databricks-cli
+          displayName: configuring databricks
 
-        pip3 install --upgrade databricks-cli
-      displayName: configuring databricks
-
-    - powershell: |
-        databricks workspace list 
-        databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/src/databricks/ /demo
+        - powershell: |
+            databricks workspace list 
+            databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/src/databricks/ /demo
