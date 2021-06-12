@@ -22,33 +22,33 @@ steps:
     architecture: 'x64'
 
 
-# - powershell: |
-#     pip3 install --upgrade databricks-cli
-    
-#     $args = @"
-#     $(databricks.host)
-
-#     $(databricks.token)
-
-#     "@
-
-#     Write-Output $args
-
-#     Write-Output $args | & databricks configure --token 
-
-#     Write-Output "`nDatabricks workspace list:"
-#     & databricks workspace list
-#   displayName: Configure databricks
-
-- bash: |
+- powershell: |
     pip3 install --upgrade databricks-cli
     
-    databricks configure --token <<EOF
+    $args = @"
     $(databricks.host)
+
     $(databricks.token)
-    EOF
-    echo -e "\nDatabricks workspace list:"
-    databricks workspace list
+
+    "@
+
+    Write-Output $args
+
+    Write-Output $(databricks.host) | & databricks configure --token 
+
+    Write-Output "`nDatabricks workspace list:"
+    & databricks workspace list
+  displayName: Configure databricks
+
+# - bash: |
+#     pip3 install --upgrade databricks-cli
+
+#     databricks configure --token <<EOF
+#     $(databricks.host)
+#     $(databricks.token)
+#     EOF
+#     echo -e "\nDatabricks workspace list:"
+#     databricks workspace list
 
 - bash: |
     databricks workspace list --profile AZDO
