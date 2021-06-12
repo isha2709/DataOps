@@ -24,7 +24,7 @@ steps:
 
 - bash: |
     pip3 install --upgrade databricks-cli
-    databricks configure --token --profile AZDO
+    echo DATABRICKS_TOKEN | databricks configure --token --profile AZDO
 
 - bash: |
     databricks workspace list --profile AZDO
