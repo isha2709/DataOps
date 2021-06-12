@@ -32,6 +32,8 @@ steps:
 
     "@
 
+    Write-Output $args
+
     Write-Output $args | & databricks configure --token 
 
     Write-Output "`nDatabricks workspace list:"
