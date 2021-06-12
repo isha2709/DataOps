@@ -22,10 +22,24 @@ steps:
     architecture: 'x64'
 
 
-- bash: |
+- powershell: |
     pip3 install --upgrade databricks-cli
-    echo DATABRICKS_HOST DATABRICKS_TOKEN | databricks configure --token --profile AZDO
+    
+    $args = @"
+    $(databricks.host)
 
+    $(databricks.token)
+
+    "@
+
+    Write-Output $args | & databricks configure --token 
+
+    Write-Output "`nDatabricks workspace list:"
+    & databricks workspace list
+    
+    
+
+  displayName: Configure databricks
 - bash: |
     databricks workspace list --profile AZDO
     databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/databricks/ /demo
