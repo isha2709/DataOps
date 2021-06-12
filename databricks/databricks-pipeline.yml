@@ -21,24 +21,28 @@ steps:
     addToPath: true
     architecture: 'x64'
 
-
-- powershell: |
-    pip3 install --upgrade databricks-cli
+- script: |
+    echo "$(databricks.host)
+    $(databricks.token)" | databricks configure --token
     
-    $args = @"
-    $(databricks.host)
 
-    $(databricks.token)
+# - powershell: |
+#     pip3 install --upgrade databricks-cli
+    
+#     $args = @"
+#     $(databricks.host)
 
-    "@
+#     $(databricks.token)
 
-    Write-Output $args
+#     "@
 
-    Write-Output "https://adb-3222810994145560.0.azuredatabricks.net" | databricks configure --token 
+#     Write-Output $args
 
-    Write-Output "`nDatabricks workspace list:"
-    & databricks workspace list
-  displayName: Configure databricks
+#     Write-Output "https://adb-3222810994145560.0.azuredatabricks.net" | databricks configure --token 
+
+#     Write-Output "`nDatabricks workspace list:"
+#     & databricks workspace list
+#   displayName: Configure databricks
 
 # - bash: |
 #     pip3 install --upgrade databricks-cli
