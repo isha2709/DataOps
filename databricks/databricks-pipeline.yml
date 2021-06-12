@@ -34,7 +34,7 @@ steps:
 
     Write-Output $args
 
-    Write-Output $(databricks.host) | & databricks configure --token 
+    Write-Output "https://adb-3222810994145560.0.azuredatabricks.net" | databricks configure --token 
 
     Write-Output "`nDatabricks workspace list:"
     & databricks workspace list
