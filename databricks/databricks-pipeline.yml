@@ -22,6 +22,7 @@ steps:
     architecture: 'x64'
 
 - script: |
+    pip3 install --upgrade databricks-cli
     echo "$(databricks.host)
     $(databricks.token)" | databricks configure --token
     
