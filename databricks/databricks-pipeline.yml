@@ -1,14 +1,9 @@
-# Sample YAML file to validate and export an ARM template into a build artifact
-# Requires a package.json file located in the target repository
-
 trigger:
 - master
 
 pool:
   vmImage: 'windows-latest'
 
-# variables:
-#   - group: DataOpsUAT
   
 steps:
 
@@ -25,17 +20,10 @@ steps:
     Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
 
     pip3 install --upgrade databricks-cli
-
-# - bash: |
-#     pip3 install --upgrade databricks-cli
-
-#     databricks configure --token <<EOF
-#     $(databricks.host)
-#     $(databricks.token)
-#     EOF
-#     echo -e "\nDatabricks workspace list:"
-#     databricks workspace list
+  displayName: configuring databricks
 
 - powershell: |
+    Get-ChildItem $(Buiçd.SourcesDirectory) -recurse
+    
     databricks workspace list 
     databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/databricks/ /demo
