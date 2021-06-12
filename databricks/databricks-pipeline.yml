@@ -21,21 +21,10 @@ steps:
     addToPath: true
     architecture: 'x64'
 
-# - script: |
-#     pip3 install --upgrade databricks-cli
-#     echo "$(databricks.host)
-#     $(databricks.token)" | databricks configure --token
-    
-
 - powershell: |
-    pip3 install --upgrade databricks-cli
-    
-    echo "$(databricks.host)
-    $(databricks.token)" | databricks configure --token
-    
-    Write-Output "`nDatabricks workspace list:"
-    & databricks workspace list
-  displayName: Configure databricks
+    Write-Output "[DEFAULT]" | Out-File ~\.databrickscfg -Encoding ASCII
+    Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
+    Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
 
 # - bash: |
 #     pip3 install --upgrade databricks-cli
@@ -47,6 +36,6 @@ steps:
 #     echo -e "\nDatabricks workspace list:"
 #     databricks workspace list
 
-- bash: |
+- powershell: |
     databricks workspace list --profile AZDO
     databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/databricks/ /demo
