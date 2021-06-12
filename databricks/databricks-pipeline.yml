@@ -26,6 +26,8 @@ steps:
     Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
     Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
 
+    pip3 install --upgrade databricks-cli
+
 # - bash: |
 #     pip3 install --upgrade databricks-cli
 
@@ -37,5 +39,5 @@ steps:
 #     databricks workspace list
 
 - powershell: |
-    databricks workspace list --profile AZDO
+    databricks workspace list 
     databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/databricks/ /demo
