@@ -10,6 +10,22 @@ stages:
       - job:
         steps:
 
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.SourcesDirectory)'
+            Contents: '**'
+            TargetFolder: $(Build.ArtifactsStagingDirectory)
+
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(Build.ArtifactsStagingDirectory)'
+            artifact: 'drop'
+            publishLocation: 'pipeline'
+  - stage: 
+    jobs:
+      - job:
+        steps:
+        
         - task: UsePythonVersion@0
           displayName: Configuring Python Version
           inputs:
@@ -27,4 +43,4 @@ stages:
 
         - powershell: |
             databricks workspace list 
-            databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/src/databricks/ /demo
+            databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/src/databricks/ /demo
