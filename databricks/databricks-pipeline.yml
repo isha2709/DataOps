@@ -41,6 +41,8 @@ steps:
 #   displayName: Configure databricks
 
 - bash: |
+    pip3 install --upgrade databricks-cli
+    
     databricks configure --token <<EOF
     $(databricks.host)
     $(databricks.token)
