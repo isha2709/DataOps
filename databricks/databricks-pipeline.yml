@@ -23,7 +23,7 @@ steps:
   displayName: configuring databricks
 
 - powershell: |
-    Get-ChildItem $(Buiçd.SourcesDirectory) -recurse
+    Get-ChildItem $(Build.SourcesDirectory) -recurse
     
     databricks workspace list 
     databricks workspace import_dir -o --profile AZDO $(Build.SourcesDirectory)/databricks/ /demo
