@@ -5,7 +5,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-  - stage: build
+  - stage: artifacts
+    displayName: Prepare Artifacts
     jobs:
       - job:
         steps:
