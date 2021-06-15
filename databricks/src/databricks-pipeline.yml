@@ -27,6 +27,20 @@ stages:
         environment: dev
         strategy:
           runOnce:
+            preDeploy:
+              steps:
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'MVP Sponsorship'
+                    subscriptionId: '337ba254-3aa0-4551-ba8e-89debefaa373'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-DataOps'
+                    location: 'North Europe'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
+                    csmParametersFile: '$(Pipeline.Workspace)/databricks/iac/databricks.parameters.json'
+                    deploymentMode: 'Incremental'
             deploy:
               steps:
               - task: UsePythonVersion@0
