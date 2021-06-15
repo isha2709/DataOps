@@ -12,15 +12,16 @@ stages:
 
         - task: CopyFiles@2
           inputs:
-            SourceFolder: '$(Build.SourcesDirectory)\databricks\src'
+            SourceFolder: '$(Build.SourcesDirectory)/databricks/src'
             Contents: '**'
-            TargetFolder: '$(Build.ArtifactsStagingDirectory)\src'
+            TargetFolder: '$(Build.ArtifactsStagingDirectory)/src'
 
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactsStagingDirectory)'
             artifact: 'databricks'
             publishLocation: 'pipeline'
+
   - stage: 
     jobs:
       - deployment: 
@@ -37,13 +38,13 @@ stages:
                   architecture: 'x64'
 
               - powershell: |
-                  Write-Output "[AZDO]" | Out-File ~\.databrickscfg -Encoding ASCII
-                  Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
-                  Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
+                  Write-Output "[AZDO]" | Out-File ~/.databrickscfg -Encoding ASCII
+                  Write-Output "host = $(databricks.host)" | Out-File ~/.databrickscfg -Encoding ASCII -Append
+                  Write-Output "token = $(databricks.token)" | Out-File ~/.databrickscfg -Encoding ASCII -Append
 
                   pip3 install --upgrade databricks-cli
                 displayName: configuring databricks
 
               - powershell: |
                   databricks workspace list 
-                  databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /demo
+                  databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /src
