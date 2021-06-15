@@ -12,14 +12,14 @@ stages:
 
         - task: CopyFiles@2
           inputs:
-            SourceFolder: '$(Build.SourcesDirectory)'
+            SourceFolder: '$(Build.SourcesDirectory)\src\databricks'
             Contents: '**'
-            TargetFolder: $(Build.ArtifactsStagingDirectory)
+            TargetFolder: '$(Build.ArtifactsStagingDirectory)\src'
 
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactsStagingDirectory)'
-            artifact: 'drop'
+            artifact: 'databricks'
             publishLocation: 'pipeline'
   - stage: 
     jobs:
@@ -43,4 +43,4 @@ stages:
 
         - powershell: |
             databricks workspace list 
-            databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/src/databricks/ /demo
+            databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /demo
