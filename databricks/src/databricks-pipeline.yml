@@ -13,7 +13,15 @@ stages:
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(Build.SourcesDirectory)/databricks/src'
-            Contents: '**'
+            Contents: | # databricks supported extensions: https://docs.databricks.com/notebooks/notebooks-manage.html#notebook-external-formats
+              **/*.py
+              **/*.sql
+              **/*.scala
+              **/*.sc
+              **/*.r
+              **/*.html
+              **/*.ipynb
+              **/*.Rmd
             TargetFolder: '$(Build.ArtifactsStagingDirectory)/src'
 
         - task: PublishPipelineArtifact@1
