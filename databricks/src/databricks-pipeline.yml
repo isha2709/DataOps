@@ -2,7 +2,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 stages:
   - stage: build
@@ -48,3 +48,4 @@ stages:
               - powershell: |
                   databricks workspace list 
                   databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /src
+                displayName: deploying notebooks
