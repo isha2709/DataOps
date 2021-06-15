@@ -33,7 +33,8 @@ stages:
 
   - stage: 
     jobs:
-      - deployment: 
+      - deployment:
+        displayName: Deploy
         environment: dev
         strategy:
           runOnce:
