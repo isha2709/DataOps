@@ -55,7 +55,6 @@ stages:
                   pip3 install --upgrade databricks-cli
                 displayName: configuring databricks
 
-              - powershell: |
-                  databricks workspace list 
+              - powershell: |                  
                   databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /src
                 displayName: deploying notebooks
