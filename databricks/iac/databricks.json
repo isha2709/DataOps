@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "databricksPrefix": {
+            "defaultValue": "[concat('databricks', uniqueString(resourceGroup().id))]",
+            "type": "String"
+        }        
+    },
+    "variables": {        
+        "databricksUniqueName": "[concat(parameters('databricksPrefix'),'-',guid(resourceGroup().id))]",
+        "managedResourceGroupName": "[concat('databricks-rg-', variables('databricksUniqueName'), '-', uniqueString(variables('databricksUniqueName'), resourceGroup().id))]"
+    },
+    "resources": [        
+        
+        {
+            "type": "Microsoft.Databricks/workspaces",
+            "apiVersion": "2018-04-01",
+            "name": "[variables('databricksUniqueName')]",
+            "location": "northeurope",
+            "dependsOn": [],
+            "sku": {
+                "name": "trial"
+            },
+            "properties": {
+                "managedResourceGroupId": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', variables('managedResourceGroupName'))]"
+            }
+        }
+    ]
+}
