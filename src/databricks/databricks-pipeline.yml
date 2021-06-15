@@ -23,24 +23,27 @@ stages:
             publishLocation: 'pipeline'
   - stage: 
     jobs:
-      - job:
-        steps:
-        
-        - task: UsePythonVersion@0
-          displayName: Configuring Python Version
-          inputs:
-            versionSpec: '3.x'
-            addToPath: true
-            architecture: 'x64'
+      - deployment: 
+        environment: dev
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: UsePythonVersion@0
+                displayName: Configuring Python Version
+                inputs:
+                  versionSpec: '3.x'
+                  addToPath: true
+                  architecture: 'x64'
 
-        - powershell: |
-            Write-Output "[AZDO]" | Out-File ~\.databrickscfg -Encoding ASCII
-            Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
-            Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
+              - powershell: |
+                  Write-Output "[AZDO]" | Out-File ~\.databrickscfg -Encoding ASCII
+                  Write-Output "host = $(databricks.host)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
+                  Write-Output "token = $(databricks.token)" | Out-File ~\.databrickscfg -Encoding ASCII -Append
 
-            pip3 install --upgrade databricks-cli
-          displayName: configuring databricks
+                  pip3 install --upgrade databricks-cli
+                displayName: configuring databricks
 
-        - powershell: |
-            databricks workspace list 
-            databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /demo
+              - powershell: |
+                  databricks workspace list 
+                  databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /demo
