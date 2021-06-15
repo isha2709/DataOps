@@ -32,9 +32,9 @@ stages:
             publishLocation: 'pipeline'
 
   - stage: 
+    displayName: Deploy
     jobs:
       - deployment:
-        displayName: Deploy
         environment: dev
         strategy:
           runOnce:
