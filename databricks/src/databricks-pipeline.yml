@@ -24,7 +24,13 @@ stages:
               **/*.ipynb
               **/*.Rmd
             TargetFolder: '$(Build.ArtifactsStagingDirectory)/src'
-
+        
+        - task: CopyFiles@2
+          inputs:
+            SourceFolder: '$(Build.SourcesDirectory)/databricks/iac'
+            Contents: '**'
+            TargetFolder: '$(Build.ArtifactsStagingDirectory)/iac'
+        
         - task: PublishPipelineArtifact@1
           inputs:
             targetPath: '$(Build.ArtifactsStagingDirectory)'
@@ -38,6 +44,20 @@ stages:
         environment: dev
         strategy:
           runOnce:
+            preDeploy:
+              steps:
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'MVP Sponsorship'
+                    subscriptionId: '337ba254-3aa0-4551-ba8e-89debefaa373'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: 'RG-DataOps'
+                    location: 'North Europe'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
+                    deploymentMode: 'Incremental'
+                    
             deploy:
               steps:
               - task: UsePythonVersion@0
