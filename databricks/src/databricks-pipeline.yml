@@ -46,6 +46,8 @@ stages:
           runOnce:
             preDeploy:
               steps:
+                - powershell: |
+                    Get-ChildItem $(Pipeline.Workspace) -recurse
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
