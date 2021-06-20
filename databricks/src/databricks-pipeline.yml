@@ -30,18 +30,15 @@ stages:
             SourceFolder: '$(Build.SourcesDirectory)/databricks/iac'
             Contents: '**'
             TargetFolder: '$(Build.ArtifactsStagingDirectory)/iac'
+        
         - publish: $(Build.ArtifactsStagingDirectory)
           artifact: databricks
-        # - task: PublishPipelineArtifact@1
-        #   inputs:
-        #     targetPath: '$(Build.ArtifactsStagingDirectory)'
-        #     artifact: 'databricks'
-        #     publishLocation: 'pipeline'
 
   - stage: 
     displayName: Deploy
     jobs:
       - deployment:
+        displayName: Databricks Deploy
         environment: dev
         strategy:
           runOnce:
@@ -49,8 +46,10 @@ stages:
               steps:
                 - download: current
                   artifact: databricks
+                
                 - powershell: |
                     Get-ChildItem $(Pipeline.Workspace) -recurse
+                
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
