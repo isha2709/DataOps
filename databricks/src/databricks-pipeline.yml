@@ -56,7 +56,7 @@ stages:
                     azureResourceManagerConnection: 'MVP Sponsorship'
                     subscriptionId: '337ba254-3aa0-4551-ba8e-89debefaa373'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-DataOps'
+                    resourceGroupName: 'RG-Synapse'
                     location: 'North Europe'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
