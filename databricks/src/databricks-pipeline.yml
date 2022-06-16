@@ -84,6 +84,8 @@ stages:
                 displayName: deploying notebooks
 
   - stage: DeployProd
+    dependsOn: DeployTest
+    condition: succeeded()
     displayName: Deploy - Production
     jobs:
       - deployment:
