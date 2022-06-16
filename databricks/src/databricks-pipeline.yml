@@ -1,5 +1,5 @@
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -34,8 +34,8 @@ stages:
         - publish: $(Build.ArtifactsStagingDirectory)
           artifact: databricks
 
-  - stage: 
-    displayName: Deploy
+  - stage: DeployTest
+    displayName: Deploy - Test
     jobs:
       - deployment:
         displayName: Databricks Deploy
@@ -56,7 +56,7 @@ stages:
                     azureResourceManagerConnection: 'Isha_ABI'
                     subscriptionId: 'c03d3356-a4b8-48aa-bdf0-d5ace508a0a0'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'ABI-Test'
+                    resourceGroupName: $(Test-RG)
                     location: 'West Europe'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
@@ -75,6 +75,55 @@ stages:
                   Write-Output "[AZDO]" | Out-File ~/.databrickscfg -Encoding ASCII
                   Write-Output "host = $(databricks.host)" | Out-File ~/.databrickscfg -Encoding ASCII -Append
                   Write-Output "token = $(databricks.token)" | Out-File ~/.databrickscfg -Encoding ASCII -Append
+
+                  pip3 install --upgrade databricks-cli
+                displayName: configuring databricks
+
+              - powershell: |                  
+                  databricks workspace import_dir -o --profile AZDO $(Pipeline.Workspace)/databricks/src/ /src
+                displayName: deploying notebooks
+
+  - stage: DeployProd
+    displayName: Deploy - Production
+    jobs:
+      - deployment:
+        displayName: Databricks Deploy
+        environment: prod
+        strategy:
+          runOnce:
+            preDeploy:
+              steps:
+                - download: current
+                  artifact: databricks
+                
+                - powershell: |
+                    Get-ChildItem $(Pipeline.Workspace) -recurse
+                
+                - task: AzureResourceManagerTemplateDeployment@3
+                  inputs:
+                    deploymentScope: 'Resource Group'
+                    azureResourceManagerConnection: 'Isha_ABI'
+                    subscriptionId: 'c03d3356-a4b8-48aa-bdf0-d5ace508a0a0'
+                    action: 'Create Or Update Resource Group'
+                    resourceGroupName: $(Prod-RG)
+                    location: 'West Europe'
+                    templateLocation: 'Linked artifact'
+                    csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
+                    deploymentMode: 'Incremental'
+                    
+            deploy:
+              steps:
+              - task: UsePythonVersion@0
+                displayName: Configuring Python Version
+                inputs:
+                  versionSpec: '3.x'
+                  addToPath: true
+                  architecture: 'x64'
+
+              - powershell: |
+                  Write-Output "[AZDO]" | Out-File ~/.databrickscfg -Encoding ASCII
+                  Write-Output "host = $(prod.databricks.host)" | Out-File ~/.databrickscfg -Encoding ASCII -Append
+                  Write-Output "token = $(prod.databricks.token)" | Out-File ~/.databrickscfg -Encoding ASCII -Append
 
                   pip3 install --upgrade databricks-cli
                 displayName: configuring databricks
