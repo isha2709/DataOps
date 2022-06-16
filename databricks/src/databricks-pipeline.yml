@@ -54,10 +54,10 @@ stages:
                   inputs:
                     deploymentScope: 'Resource Group'
                     azureResourceManagerConnection: 'MVP Sponsorship'
-                    subscriptionId: '337ba254-3aa0-4551-ba8e-89debefaa373'
+                    subscriptionId: 'c03d3356-a4b8-48aa-bdf0-d5ace508a0a0'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: 'RG-Synapse'
-                    location: 'North Europe'
+                    resourceGroupName: 'ABI-Test'
+                    location: 'West Europe'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
                     deploymentMode: 'Incremental'
