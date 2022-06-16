@@ -56,7 +56,7 @@ stages:
                     azureResourceManagerConnection: 'Isha_ABI'
                     subscriptionId: 'c03d3356-a4b8-48aa-bdf0-d5ace508a0a0'
                     action: 'Create Or Update Resource Group'
-                    resourceGroupName: $(Test-RG)
+                    resourceGroupName: $(Test_RG)
                     location: 'West Europe'
                     templateLocation: 'Linked artifact'
                     csmFile: '$(Pipeline.Workspace)/databricks/iac/databricks.json'
