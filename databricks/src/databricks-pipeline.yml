@@ -53,7 +53,7 @@ stages:
                 - task: AzureResourceManagerTemplateDeployment@3
                   inputs:
                     deploymentScope: 'Resource Group'
-                    azureResourceManagerConnection: 'MVP Sponsorship'
+                    azureResourceManagerConnection: 'Isha_ABI'
                     subscriptionId: 'c03d3356-a4b8-48aa-bdf0-d5ace508a0a0'
                     action: 'Create Or Update Resource Group'
                     resourceGroupName: 'ABI-Test'
