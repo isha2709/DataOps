@@ -24,7 +24,7 @@ jobs:
     environment: "abi-databricks-${{ inputs.env_name }}"
 
     env:
-      ResourceGroupName: "ABI-Databricks-${{ inputs.env_name }}"
+      ResourceGroupName: "ABI-Databricks-GitHub-${{ inputs.env_name }}"
       ResourceGroupLocation: ${{ inputs.resource_group_location }}
 
     steps:
