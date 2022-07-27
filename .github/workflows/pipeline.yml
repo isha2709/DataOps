@@ -38,57 +38,37 @@ jobs:
           retention-days: 1
 
   deploy-dev:
-    runs-on: ubuntu-latest
     name: Deploy Dev Environment
     needs: publish_artifacts
-    environment: abi-databricks-dev
+    uses: ./.github/workflows/deploy-databricks.yml
+    with:
+      env_name: dev
+      resource_group_location: northeurope
+      databricks-host: "https://adb-6242632037685839.19.azuredatabricks.net"
+    secrets:
+      pat: ${{ secrets.DATABRICKS_PAT }}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-    env:
-      ResourceGroupName: "ABI-Databricks-Dev"
-      ResourceGroupLocation: "northeurope"
+  deploy-qa:
+    name: Deploy QA Environment
+    needs: deploy-dev
+    uses: ./.github/workflows/deploy-databricks.yml
+    with:
+      env_name: qa
+      resource_group_location: northeurope
+      databricks-host: "https://adb-8049117000605825.5.azuredatabricks.net"
+    secrets:
+      pat: ${{ secrets.DATABRICKS_PAT }}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
 
-    steps:
-      - name: Download iac files
-        uses: actions/download-artifact@v3
-        with:
-          name: iac_artifacts
-          path: iac/
-
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            az group create --name ${{ env.ResourceGroupName }} --location ${{ env.ResourceGroupLocation }}
-            echo "Azure resource group created"
-
-      - name: Deploy ARM resources
-        uses: azure/arm-deploy@v1
-        with:
-          resourceGroupName: ${{ env.ResourceGroupName }}
-          template: iac/databricks.json
-          
-      - name: install-databricks-cli
-        uses: microsoft/install-databricks-cli@v1.0.0
-        
-      - name: Download src files
-        uses: actions/download-artifact@v3
-        with:
-          name: src_artifacts
-          path: src/
-        
-      - name: databricks-import-directory
-        uses: microsoft/databricks-import-notebook@v1.0.0
-        with:
-          # Databricks host
-          databricks-host: "https://adb-6242632037685839.19.azuredatabricks.net"
-          # Databricks token
-          databricks-token: ${{ secrets.DEV_DATABRICKS_PAT }}
-          # LOCAL_NOTEBOOKS_PATH
-          local-path: src/
-          # REMOTE_NOTEBOOK_PATH
-          remote-path: /
+  deploy-prod:
+    name: Deploy Production Environment
+    needs: deploy-qa
+    uses: ./.github/workflows/deploy-databricks.yml
+    with:
+      env_name: production
+      resource_group_location: northeurope
+      databricks-host: "https://adb-1026900206524696.16.azuredatabricks.net"
+    secrets:
+      pat: ${{ secrets.DATABRICKS_PAT }}
+      azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
