@@ -44,7 +44,7 @@ jobs:
     with:
       env_name: dev
       resource_group_location: northeurope
-      databricks-host: "https://adb-6889071065693527.7.azuredatabricks.net"
+      databricks-host: "https://adb-2698742496998326.6.azuredatabricks.net"
     secrets:
       pat: ${{ secrets.DATABRICKS_PAT }}
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
