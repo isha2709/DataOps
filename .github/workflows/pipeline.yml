@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
-    branches: ["dev"]
+    branches: ["master"]
   pull_request:
     branches: ["dev"]
 
@@ -44,7 +44,7 @@ jobs:
     with:
       env_name: dev
       resource_group_location: northeurope
-      databricks-host: "https://adb-7530374090854046.6.azuredatabricks.net"
+      databricks-host: "https://adb-2698742496998326.6.azuredatabricks.net"
     secrets:
       pat: ${{ secrets.DATABRICKS_PAT }}
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -56,7 +56,7 @@ jobs:
     with:
       env_name: qa
       resource_group_location: northeurope
-      databricks-host: "https://adb-8049117000605825.5.azuredatabricks.net"
+      databricks-host: "https://adb-4658856550054890.10.azuredatabricks.net"
     secrets:
       pat: ${{ secrets.DATABRICKS_PAT }}
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
@@ -68,7 +68,7 @@ jobs:
     with:
       env_name: production
       resource_group_location: northeurope
-      databricks-host: "https://adb-1026900206524696.16.azuredatabricks.net"
+      databricks-host: "https://adb-1248879248841186.6.azuredatabricks.net"
     secrets:
       pat: ${{ secrets.DATABRICKS_PAT }}
       azure_credentials: ${{ secrets.AZURE_CREDENTIALS }}
