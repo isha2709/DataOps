@@ -46,6 +46,8 @@ class Calculator:
 		else:
 			return x/y
 
+	#This is a test command
+
 # COMMAND ----------
 
 c = Calculator()
